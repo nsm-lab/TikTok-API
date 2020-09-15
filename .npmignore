@@ -1,0 +1,25 @@
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Dependencies
+node_modules/
+
+# Coverage
+.nyc_output/
+
+# Project files
+/scripts/
+/src/
+.editorconfig
+.gitignore
+.markdownlint.json
+.travis.yml
+package-lock.json
+tsconfig.json
+tslint.json
+
+# Build
+*.tgz

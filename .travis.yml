@@ -1,0 +1,41 @@
+language: node_js
+node_js:
+  - "lts/*"
+
+cache:
+  directories:
+    - "node_modules"
+
+stages:
+  - test
+  - name: deploy
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - npm run lint
+        - npm run type-check
+        - npm run test-with-coverage
+        - npm run build
+      after_success:
+        - npm run coverage
+    - stage: deploy
+      script:
+        - npm run build
+        - npm pack
+      deploy:
+        - provider: releases
+          api_key: "${GITHUB_TOKEN}"
+          file_glob: true
+          file: "tiktok-api-*.tgz"
+          skip_cleanup: true
+          on:
+            tags: true
+        - provider: npm
+          email: "${NPM_EMAIL}"
+          api_key: "${NPM_TOKEN}"
+          skip_cleanup: true
+          on:
+            tags: true
